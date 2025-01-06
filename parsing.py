@@ -5,9 +5,19 @@ from telethon.tl.types import Channel
 import pandas as pd
 import re
 
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+api_id = config.get('telegram', 'api_id')
+api_hash = config.get('telegram', 'api_hash')
+
+
+
 # Установите свои API_ID и API_HASH
-api_id = 23661681
-api_hash = 'efaff6fc0d56bf04e214e63a455b438a'
+# api_id = 23661681
+# api_hash = 'efaff6fc0d56bf04e214e63a455b438a'
 client_session = 'anon'
 
 # Список имен каналов без @
