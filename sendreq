@@ -1,0 +1,13 @@
+import requests
+
+url = 'http://localhost:8000/predict'  # убедитесь, что здесь используется порт 8000
+data = {
+    'numbers': [[...]]  # ваши данные
+}
+
+response = requests.post(url, json=data)
+
+if response.status_code == 200:
+    print("Получено предсказание:", response.json())
+else:
+    print("Ошибка при отправке запроса:", response.text)
