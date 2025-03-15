@@ -6,6 +6,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
+COPY check.py .
 COPY mobilenetv2-12.onnx .
 EXPOSE 8000
 
