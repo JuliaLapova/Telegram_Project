@@ -2,7 +2,10 @@
 
 ## Демонстрация работы
 
-[![Превью видео](https://github.com/JuliaLapova/Telegram_Project/blob/6548c0a633d84ac256942b9b85ddfbb0d3ff6a59/mlops.jpg)](https://vkvideo.ru/video25188700_456239033)
+![Превью видео](https://github.com/JuliaLapova/Telegram_Project/blob/6548c0a633d84ac256942b9b85ddfbb0d3ff6a59/mlops.jpg)
+
+[Ссылка на короткую видеопрезентацию]([http://31.129.97.70:8501](https://vkvideo.ru/video25188700_456239033)/)
+
 
 Части проекта:
 - Создана простая модель для предсказания числовых значений (код для сборки модели содержится в файле project.py)
