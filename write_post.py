@@ -1,13 +1,12 @@
 import pyodbc
-import config # Импортируем модуль config.py
 
 def get_channel_names():
-    # Используем переменные из config.py
+    # Параметры подключения к базе данных
     conn_str = (
-        f"DRIVER={config.DATABASE_DRIVER};"
-        f"SERVER={config.DATABASE_SERVER};"
-        f"DATABASE={config.DATABASE_NAME};"
-        f"Trusted_Connection={config.DATABASE_TRUSTED_CONNECTION};"
+        r'DRIVER={SQL Server};'
+        r'SERVER=localhost\SQLEXPRESS;'
+        r'DATABASE=automatetg;'
+        r'Trusted_Connection=yes;'
     )
 
     try:
