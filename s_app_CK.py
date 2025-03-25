@@ -27,7 +27,7 @@ multi_index = pd.MultiIndex.from_tuples(
 
 # Создаем DataFrame с данными
 data = {
-    "ConfigId": [6, 5, 2, 9, 8, 6, 6, 6, 6, 6, 6],
+    # "ConfigId": [6, 5, 2, 9, 8, 6, 6, 6, 6, 6, 6],
     "ConfigName": ['Проекты МО', 'Проекты МО', 'Страна', 'Проекты МО(Нежилое)', 'Проекты Москвы(Нежилое)', 'Проекты МО', 'Проекты МО', 'Проекты МО', 'Проекты МО', 'Проекты МО', 'Проекты МО'],
     "projectname": ["ЛЮБЕРЦЫ", "ЛЮБЕРЦЫ", "ЛЮБЕРЦЫ", "ЛЮБЕРЦЫ", "ЛЮБЕРЦЫ", "ТОМИЛИНО", "ТОМИЛИНО", "ТОМИЛИНО", "ТОМИЛИНО", "ТОМИЛИНО", "ТОМИЛИНО"],
     "TurnName": ["6 очередь", "6 очередь", "6 очередь", "7 очередь", "7 очередь", "3 очередь", "3 очередь", "4 очередь", "4 очередь", "4 очередь", "5 очередь"],
@@ -49,18 +49,18 @@ st.subheader("Сервис для редактирования справочн�
 
 # Поля ввода для добавления новой строки в одну строку
 cols = st.columns(8)
-new_config_id = cols[0].text_input("ConfigId", help="Номер конфигурации. Используется для фильтра по проектам.")
+new_config_id = cols[0].selectbox("Группа проектов", options=["Проекты МО", "Страна", "Проекты МО(Нежилое)", "Проекты Москвы(Нежилое)"], help="Группа проектов. Используется для фильтра по проектам.")
 #new_num = cols[1].text_input("num", help="Введите номер")
-new_projectname = cols[1].selectbox("projectname", options=["NOVA", "Квартал Домашний", "Химки Парк", "Квартал Торики"], help="Выберите проект из справочника проектов CRM. Проекта может не быть в CRM, даже не смотря на то, что по проекту могут быть внесены планы.")
-new_turnname = cols[2].text_input("TurnName", help="Укажите номер очереди")
-new_stepname = cols[3].text_input("StepName", help="Укажите номер этапа")
+new_projectname = cols[1].selectbox("Проект как в CRM", options=["NOVA", "Квартал Домашний", "Химки Парк", "Квартал Торики"], help="Выберите проект из справочника проектов CRM. Проекта может не быть в CRM, даже если внесены планы.")
+new_turnname = cols[2].selectbox("Очередь", options=[f"{i} очередь" for i in range(1, 21)], help="Укажите номер очереди.")
+new_stepname = cols[3].selectbox("Этап", options=["Пусто"] + [f"{i} этап" for i in range(1, 11)], help="Укажите номер этапа или оставьте поле пустым.")
 #new_interior = cols[5].text_input("interior", help="Введите название интерьера")
 #new_bystep = cols[6].text_input("bystep", help="Введите номер по этапу")
 #new_byinterior = cols[7].text_input("byinterior", help="Введите номер по интерьеру")
-new_rowname = cols[4].text_input("RowName", help="Укажите наименование так, как оно должно отображаться в отчете")
-new_bu_column = cols[5].text_input("bu_column", help="Укажите Бизнес-Юнит")
-new_location_column = cols[6].text_input("location_column", help="Укажите местоположение")
-new_sort_num = cols[7].text_input("sort_num", help="Введите номер сортировки, для регулирования местоположения строки в проекте")
+new_rowname = cols[4].text_input("Наименование в отчете", help="Укажите наименование так, как оно должно отображаться в отчете.")
+new_bu_column = cols[5].selectbox("Бизнес-Юнит", options=["БЮ МО", "БЮ Москва", "Москва", "Страна"], help="Укажите Бизнес-Юнит.")
+new_location_column = cols[6].text_input("Регион", help="Укажите регион.")
+new_sort_num = cols[7].text_input("Сортировка", help="Введите номер сортировки, для регулирования местоположения строки в отчете.")
 
 # Проверка выбора проекта
 if new_projectname == "Химки Парк":
@@ -86,16 +86,17 @@ if st.button("Добавить строку"):
     st.success("Строка добавлена!")
     st.dataframe(df, use_container_width=True)
 
-# Фильтры для таблицы
-configid_filter = st.selectbox("Фильтр по ConfigId", options=["Все"] + list(df["ConfigId"].unique()))
-projectname_filter = st.selectbox("Фильтр по projectname", options=["Все"] + list(df["projectname"].unique()))
-turnname_filter = st.selectbox("Фильтр по TurnName", options=["Все"] + list(df["TurnName"].unique()))
-stepname_filter = st.selectbox("Фильтр по StepName", options=["Все"] + list(df["StepName"].unique()))
+# Фильтры для таблицы в одной строке
+filter_cols = st.columns(4)
+configname_filter = filter_cols[0].selectbox("Фильтр по Группе", options=["Все"] + list(df["ConfigName"].unique()))
+projectname_filter = filter_cols[1].selectbox("Фильтр по Названию Проекта", options=["Все"] + list(df["projectname"].unique()))
+turnname_filter = filter_cols[2].selectbox("Фильтр по Очереди", options=["Все"] + list(df["TurnName"].unique()))
+stepname_filter = filter_cols[3].selectbox("Фильтр по Этапу", options=["Все"] + list(df["StepName"].unique()))
 
 # Применение фильтров
 filtered_df = df
-if configid_filter != "Все":
-    filtered_df = filtered_df[filtered_df["ConfigId"] == configid_filter]
+if configname_filter != "Все":
+    filtered_df = filtered_df[filtered_df["ConfigName"] == configname_filter]
 if projectname_filter != "Все":
     filtered_df = filtered_df[filtered_df["projectname"] == projectname_filter]
 if turnname_filter != "Все":
@@ -104,21 +105,35 @@ if stepname_filter != "Все":
     filtered_df = filtered_df[filtered_df["StepName"] == stepname_filter]
 
 
-
-# Кнопка для удаления выбранных строк
+# Кнопка для удаления выбранных строк после фильтров
 if st.button("Удалить выбранные строки"):
-    if configid_filter != "Все":
-        df = df[df["ConfigId"] != configid_filter]
+    if configname_filter != "Все":
+        df = df[df["ConfigName"] != configname_filter]
     if projectname_filter != "Все":
         df = df[df["projectname"] != projectname_filter]
     if turnname_filter != "Все":
         df = df[df["TurnName"] != turnname_filter]
+    if stepname_filter != "Все":
+        df = df[df["StepName"] != stepname_filter]
     st.success("Выбранные строки удалены!")
     st.dataframe(df, use_container_width=True)
 
-# Отображаем отфильтрованную таблицу в Streamlit
+
+# Создаем копию DataFrame с переименованными заголовками для отображения
+renamed_df = filtered_df.rename(columns={
+    "ConfigName": "Группа проектов",
+    "projectname": "Название проекта",
+    "TurnName": "Очередь",
+    "StepName": "Этап",
+    "RowName": "Наименование в отчете",
+    "bu_column": "Бизнес-Юнит",
+    "location_column": "Регион",
+    "sort_num": "Сортировка"
+})
+
+# Отображаем отфильтрованную таблицу с новыми заголовками в Streamlit 
 st.subheader("Справочник ЦК Проекты")
-st.dataframe(filtered_df, use_container_width=True)
+st.dataframe(renamed_df, use_container_width=True)
 
 # Добавляем кнопку для скачивания Excel файла
 if st.button("Скачать Excel"):
