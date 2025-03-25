@@ -46,6 +46,7 @@ df = pd.DataFrame(data)
 # Отображаем отфильтрованную таблицу в Streamlit
 st.subheader("Сервис для редактирования справочника 'ЦК Проекты' для отчета 'ЦК CRM'")
 
+st.markdown("[Описание в конфлюенс](https://wiki.samoletgroup.ru/pages/viewpage.action?pageId=450200680)")
 
 # Поля ввода для добавления новой строки в одну строку
 cols = st.columns(8)
